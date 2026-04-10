@@ -1,24 +1,9 @@
-const https = require('https');
 const http = require('http');
-
-const BS_TOKEN = process.env.BS_TOKEN;
-
+const https = require('https');
 http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'application/json');
-
-  const tag = new URL(req.url, 'http://x').searchParams.get('tag') || '';
-  if (!tag) { res.writeHead(400); res.end(JSON.stringify({error:'Missing tag'})); return; }
-
-  const encoded = encodeURIComponent(tag.startsWith('#') ? tag : '#' + tag);
-  https.get({
-    hostname: 'api.brawlstars.com',
-    path: `/v1/players/${encoded}`,
-    headers: { Authorization: `Bearer ${BS_TOKEN}`, Accept: 'application/json' }
-  }, (r) => {
-    let body = '';
-    r.on('data', c => body += c);
-    r.on('end', () => { res.writeHead(r.statusCode); res.end(body); });
-  }).on('error', e => { res.writeHead(500); res.end(JSON.stringify({error: e.message})); });
-
-}).listen(process.env.PORT || 3000);
+  https.get('https://api.ipify.org?format=json', (r) => {
+    let b = ''; r.on('data', c => b += c);
+    r.on('end', () => { res.end(b); });
+  });
+}).listen(process.env.PORT || 3000
