@@ -2169,7 +2169,7 @@ async function fetchPlayer() {
   let data = null;
 
   try {
-    const res = await fetch(`https://brawlscops-vb8q.onrender.com/?tag=${enc}`);
+    const res = await fetch(`https://brawlscope.onrender.com/?tag=${enc}`);
     if(res.status===404) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
