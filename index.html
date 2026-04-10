@@ -468,6 +468,7 @@ header {
 .rarity-epic       { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
 .rarity-mythic     { background: rgba(251,113,133,0.15); color: #fb7185; border: 1px solid rgba(251,113,133,0.35); }
 .rarity-legendary  { background: rgba(250,204,21,0.18); color: #facc15; border: 1px solid rgba(250,204,21,0.4); box-shadow: 0 0 8px rgba(250,204,21,0.15); }
+.rarity-ultra-legendary { background: rgba(255,60,120,0.18); color: #ff3c78; border: 1px solid rgba(255,60,120,0.5); box-shadow: 0 0 10px rgba(255,60,120,0.2); }
 
 /* ══════════════════════════════════════
    PRIORITY LIST
@@ -2002,31 +2003,45 @@ function getPlayerIconWithFallback(imgEl, iconId) {
 }
 
 const BRAWLER_RARITY = {
+  // ── ULTRA LEGENDARY ──
+  'KAZE':'ultra-legendary','SIRIUS':'ultra-legendary',
+
+  // ── LEGENDARY ──
   'SPIKE':'legendary','CROW':'legendary','LEON':'legendary','SANDY':'legendary',
-  'AMBER':'legendary','MEG':'legendary','CHESTER':'legendary','CORDELIUS':'legendary',
-  'KIT':'legendary','DRACO':'legendary','LILY':'legendary','LARRY & LAWRIE':'legendary',
-  'KENJI':'legendary','SHADE':'legendary','SIRIUS':'legendary',
-  'MAX':'mythic','MR. P':'mythic','SPROUT':'mythic','BYRON':'mythic',
-  'SQUEAK':'mythic','LOU':'mythic','RUFFS':'mythic','BELLE':'mythic',
-  'BUZZ':'mythic','GRIFF':'mythic','ASH':'mythic','LOLA':'mythic',
-  'FANG':'mythic','EVE':'mythic','JANET':'mythic','BONNIE':'mythic',
-  'OTIS':'mythic','SAM':'mythic','GROM':'mythic','BUSTER':'mythic',
-  'GRAY':'mythic','MELODIE':'mythic','ANGELO':'mythic','MICO':'mythic',
-  'CHARLIE':'mythic','CHUCK':'mythic','HANK':'mythic','PEARL':'mythic',
-  'CLANCY':'mythic','JUJU':'mythic','WILLOW':'mythic','BERRY':'mythic',
-  'KAZE':'mythic','NAJIA':'mythic','ZIGGY':'mythic',
-  'PIPER':'epic','PAM':'epic','FRANK':'epic','BIBI':'epic',
-  'MORTIS':'epic','TARA':'epic','GENE':'epic',
-  'PENNY':'epic','CARL':'epic','JACKY':'epic','GALE':'epic',
-  'EMZ':'epic','STU':'epic','MANDY':'epic',
-  'MAISIE':'epic','WATTSON':'epic','LUMI':'epic','DOUG':'epic',
-  'SURGE':'epic','COLETTE':'epic',
+  'SURGE':'legendary','AMBER':'legendary','MEG':'legendary','CHESTER':'legendary',
+  'CORDELIUS':'legendary','KIT':'legendary','DRACO':'legendary','KENJI':'legendary',
+  'PIERCE':'legendary',
+
+  // ── MYTHIC ──
+  'MORTIS':'mythic','TARA':'mythic','GENE':'mythic','MR. P':'mythic',
+  'MAX':'mythic','SPROUT':'mythic','LOU':'mythic','BYRON':'mythic',
+  'RUFFS':'mythic','SQUEAK':'mythic','BUZZ':'mythic','FANG':'mythic',
+  'EVE':'mythic','JANET':'mythic','OTIS':'mythic','BUSTER':'mythic',
+  'GRAY':'mythic','R-T':'mythic','WILLOW':'mythic','DOUG':'mythic',
+  'CHUCK':'mythic','CHARLIE':'mythic','MICO':'mythic','MELODIE':'mythic',
+  'LILY':'mythic','CLANCY':'mythic','MOE':'mythic','JUJU':'mythic',
+  'OLLIE':'mythic','LUMI':'mythic','FINX':'mythic','JAE-YONG':'mythic',
+  'ALLI':'mythic','MINA':'mythic','ZIGGY':'mythic','GIGI':'mythic',
+  'GLOWBERT':'mythic','NAJIA':'mythic',
+
+  // ── EPIC ──
+  'BO':'epic','PIPER':'epic','PAM':'epic','FRANK':'epic','BIBI':'epic',
+  'BEA':'epic','EMZ':'epic','GALE':'epic','NANI':'epic','COLETTE':'epic',
+  'EDGAR':'epic','STU':'epic','BELLE':'epic','GROM':'epic','GRIFF':'epic',
+  'ASH':'epic','LOLA':'epic','BONNIE':'epic','SAM':'epic','MANDY':'epic',
+  'MAISIE':'epic','HANK':'epic','PEARL':'epic','LARRY & LAWRIE':'epic',
+  'ANGELO':'epic','BERRY':'epic','SHADE':'epic','MEEPLE':'epic','TRUNK':'epic',
+
+  // ── SUPER RARE ──
   'COLT':'super-rare','NITA':'super-rare','BULL':'super-rare',
   'BROCK':'super-rare','RICO':'super-rare','DARRYL':'super-rare',
   '8-BIT':'super-rare','TICK':'super-rare','BARLEY':'super-rare',
   'POCO':'super-rare','ROSA':'super-rare','DYNAMIKE':'super-rare',
-  'EL PRIMO':'super-rare','JESSIE':'super-rare','BO':'super-rare',
-  'SHELLY':'rare',
+  'EL PRIMO':'super-rare','JESSIE':'super-rare','PENNY':'super-rare',
+  'CARL':'super-rare','JACKY':'super-rare','GUS':'super-rare',
+
+  // ── STARTING BRAWLER ──
+  'SHELLY':'common',
 };
 
 function getBrawlerRarity(name) {
@@ -2038,7 +2053,7 @@ function getBrawlerRarity(name) {
 }
 
 function getRarityLabel(r) {
-  return {'legendary':'LÉGENDAIRE','mythic':'MYTHIQUE','epic':'ÉPIQUE','super-rare':'SUPER RARE','rare':'RARE','common':'COMMUN'}[r]||'RARE';
+  return {'ultra-legendary':'ULTRA LÉGENDAIRE','legendary':'LÉGENDAIRE','mythic':'MYTHIQUE','epic':'ÉPIQUE','super-rare':'SUPER RARE','rare':'RARE','common':'COMMUN'}[r]||'RARE';
 }
 
 function getBrawlerTier(name) {
@@ -2136,7 +2151,7 @@ function hasHypercharge(b) {
     (b.mastery&&b.mastery>=10000);
 }
 
-const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImJkYmQ5MTU0LWExZDItNGRlOC1hYmJhLTMwMGE4YjVhZTdmYyIsImlhdCI6MTc3NTgzNzU4MSwic3ViIjoiZGV2ZWxvcGVyLzQyYzcxOWY1LWJkNTYtZjJlYi0zMTM4LTdkOTdhZmEyMDgxYSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiNzQuMjIwLjUxLjEwIl0sInR5cGUiOiJjbGllbnQifV19.L_oCKV26Tez0Fn93iH8dLq1Ay_0i2eVqDzxBIFAV8CVeNKfchp2fE27qFkwA7lESpc3NzUaJ3P1TYhIIh4-osw';
+const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjAzOWYyOGQ5LWFiY2EtNGY5YS05MjMzLTk4Y2IwZTZiZGQxMyIsImlhdCI6MTc3NTQwMDM0Miwic3ViIjoiZGV2ZWxvcGVyLzA5ZjQzNzk4LWE2NTAtNjBlZC01ZDg4LWE0OTJhODIyOGU2MSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMC4wLjAuMCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.TYkwxAQx-VZcyp3pg6bo_wId45jRbiitHickr4QItyBMdCVR44z2IpBnfHIioIC_j9GuphkOwxYOrgZ40Y3qmA';
 
 async function fetchPlayer() {
   let tag = document.getElementById('tagInput').value.trim().toUpperCase();
@@ -2154,7 +2169,7 @@ async function fetchPlayer() {
   let data = null;
 
   try {
-    const res = await fetch(`https://brawlscops-vb8q.onrender.com/?tag=${enc}`);
+    const res = await fetch(`https://brawlscope.onrender.com/?tag=${enc}`);
     if(res.status===404) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
