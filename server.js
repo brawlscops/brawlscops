@@ -1,7 +1,7 @@
 const https = require('https');
 const http = require('http');
 
-const BS_TOKEN = process.env.BS_TOKEN;
+const BS_TOKEN_1 = process.env.BS_TOKEN_1;
 
 http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,9 +12,9 @@ http.createServer((req, res) => {
 
   const encoded = encodeURIComponent(tag.startsWith('#') ? tag : '#' + tag);
   https.get({
-    hostname: 'api.brawlstars.com',
+    hostname: 'proxy.royaleapi.dev',
     path: `/v1/players/${encoded}`,
-    headers: { Authorization: `Bearer ${BS_TOKEN}`, Accept: 'application/json' }
+    headers: { Authorization: `Bearer ${BS_TOKEN_1}`, Accept: 'application/json' }
   }, (r) => {
     let body = '';
     r.on('data', c => body += c);
