@@ -12,9 +12,9 @@ exports.handler = async (event) => {
   
   for (const token of TOKENS) {
     if (!token) continue;
-    const response = await fetch(`https://api.brawlstars.com/v1/players/${encodedTag}`, {
-      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
-    });
+    const response = await fetch(`https://proxy.royaleapi.dev/v1/players/${encodedTag}`, {
+  headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+});
     if (response.ok) {
       const data = await response.text();
       return {
