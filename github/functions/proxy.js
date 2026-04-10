@@ -1,7 +1,5 @@
 const TOKENS = [
-  process.env.BS_TOKEN_1,
-  process.env.BS_TOKEN_2,
-  process.env.BS_TOKEN_3
+  process.env.BS_TOKEN,
 ];
 
 exports.handler = async (event) => {
