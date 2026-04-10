@@ -2136,7 +2136,7 @@ function hasHypercharge(b) {
     (b.mastery&&b.mastery>=10000);
 }
 
-const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjAzOWYyOGQ5LWFiY2EtNGY5YS05MjMzLTk4Y2IwZTZiZGQxMyIsImlhdCI6MTc3NTQwMDM0Miwic3ViIjoiZGV2ZWxvcGVyLzA5ZjQzNzk4LWE2NTAtNjBlZC01ZDg4LWE0OTJhODIyOGU2MSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMC4wLjAuMCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.TYkwxAQx-VZcyp3pg6bo_wId45jRbiitHickr4QItyBMdCVR44z2IpBnfHIioIC_j9GuphkOwxYOrgZ40Y3qmA';
+const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImJkYmQ5MTU0LWExZDItNGRlOC1hYmJhLTMwMGE4YjVhZTdmYyIsImlhdCI6MTc3NTgzNzU4MSwic3ViIjoiZGV2ZWxvcGVyLzQyYzcxOWY1LWJkNTYtZjJlYi0zMTM4LTdkOTdhZmEyMDgxYSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiNzQuMjIwLjUxLjEwIl0sInR5cGUiOiJjbGllbnQifV19.L_oCKV26Tez0Fn93iH8dLq1Ay_0i2eVqDzxBIFAV8CVeNKfchp2fE27qFkwA7lESpc3NzUaJ3P1TYhIIh4-osw';
 
 async function fetchPlayer() {
   let tag = document.getElementById('tagInput').value.trim().toUpperCase();
@@ -2154,7 +2154,7 @@ async function fetchPlayer() {
   let data = null;
 
   try {
-    const res = await fetch(`https://brawlscope.onrender.com/?tag=${enc}`);
+    const res = await fetch(`https://brawlscops-vb8q.onrender.com/?tag(enc)`);
     if(res.status===404) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
