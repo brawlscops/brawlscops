@@ -2168,8 +2168,10 @@ async function fetchPlayer() {
   document.getElementById('searchBtn').disabled = true;
   let data = null;
 
+  const PROXY_URL = window.BRAWLSCOPS_PROXY || 'https://brawlscops-vb8q.onrender.com';
+
   try {
-    const res = await fetch(`https://brawlscops-vb8q.onrender.com/?tag=${enc}`);
+    const res = await fetch(`${PROXY_URL}/?tag=${enc}`);
     if(res.status===404) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
