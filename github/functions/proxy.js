@@ -1,5 +1,7 @@
 const TOKENS = [
-  process.env.BS_TOKEN,
+  process.env.BS_TOKEN_1,
+  process.env.BS_TOKEN_2,
+  process.env.BS_TOKEN_3
 ];
 
 exports.handler = async (event) => {
@@ -10,7 +12,7 @@ exports.handler = async (event) => {
   
   for (const token of TOKENS) {
     if (!token) continue;
-    const response = await fetch(https://proxy.royaleapi.dev/v1/players/${encodedTag}`, {
+    const response = await fetch(`https://api.brawlstars.com/v1/players/${encodedTag}`, {
       headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
     });
     if (response.ok) {
