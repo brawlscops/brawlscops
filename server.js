@@ -27,7 +27,7 @@ http.createServer((req, res) => {
     https.get({
       hostname: 'api.brawlstars.com',
       path: `/v1/players/${encoded}`,
-      headers: { Authorization: `Bearer ${BS_TOKEN}`, Accept: 'application/json' }
+      headers: { Authorization: `Bearer ${BS_TOKEN}`, Accept: 'application/json', 'User-Agent': 'Mozilla/5.0' }
     }, (r) => {
       let body = '';
       r.on('data', c => body += c);
