@@ -1619,28 +1619,28 @@ footer {
     <div class="resource-inputs">
       <div class="resource-input-item">
         <label class="resource-input-label">
-          <span style="font-size:20px;line-height:1">🪙</span>
+          <img src="https://cdn.brawlify.com/general/Coins.png" onerror="this.outerHTML='🪙'" style="width:22px;height:22px;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="coins">
           Pièces
         </label>
         <input type="number" class="resource-input-field" id="resCoins" placeholder="Ex: 5000" min="0">
       </div>
       <div class="resource-input-item">
         <label class="resource-input-label">
-          <span style="font-size:20px;line-height:1">🔵</span>
+          <img src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:22px;height:22px;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="pp">
           Power Points
         </label>
         <input type="number" class="resource-input-field" id="resPP" placeholder="Ex: 2000" min="0">
       </div>
       <div class="resource-input-item">
         <label class="resource-input-label">
-          <span style="font-size:20px;line-height:1">💎</span>
+          <img src="https://cdn.brawlify.com/general/Gems.png" onerror="this.outerHTML='💎'" style="width:22px;height:22px;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="gems">
           Gemmes
         </label>
         <input type="number" class="resource-input-field" id="resGems" placeholder="Ex: 150" min="0">
       </div>
       <div class="resource-input-item">
         <label class="resource-input-label">
-          <span style="font-size:20px;line-height:1">🎟️</span>
+          <img src="https://cdn.brawlify.com/general/Credits.png" onerror="this.outerHTML='🎟️'" style="width:22px;height:22px;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="credits">
           Crédits
         </label>
         <input type="number" class="resource-input-field" id="resCredits" placeholder="Ex: 300" min="0">
@@ -1652,19 +1652,19 @@ footer {
       <div style="font-size:10px;letter-spacing:2px;color:var(--text-muted);font-family:'Orbitron',monospace;margin-bottom:8px;">TON INVENTAIRE</div>
       <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
         <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:16px">🪙</span>
+          <img src="https://cdn.brawlify.com/general/Coins.png" onerror="this.outerHTML='🪙'" style="width:18px;height:18px;object-fit:contain;vertical-align:middle" crossorigin="anonymous" loading="lazy" alt="coins">
           <span id="summaryCoins" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent)">0</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:16px">🔵</span>
+          <img src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:18px;height:18px;object-fit:contain;vertical-align:middle" crossorigin="anonymous" loading="lazy" alt="pp">
           <span id="summaryPP" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent3)">0</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:16px">💎</span>
+          <img src="https://cdn.brawlify.com/general/Gems.png" onerror="this.outerHTML='💎'" style="width:18px;height:18px;object-fit:contain;vertical-align:middle" crossorigin="anonymous" loading="lazy" alt="gems">
           <span id="summaryGems" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#a78bfa">0</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:16px">🎟️</span>
+          <img src="https://cdn.brawlify.com/general/Credits.png" onerror="this.outerHTML='🎟️'" style="width:18px;height:18px;object-fit:contain;vertical-align:middle" crossorigin="anonymous" loading="lazy" alt="credits">
           <span id="summaryCredits" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#ff7043">0</span>
         </div>
       </div>
@@ -2276,10 +2276,21 @@ function renderDashboard(data) {
 // ══════════════════════════════════════
 //  ICON HELPER — always emoji (reliable)
 // ══════════════════════════════════════
-const ICON_FALLBACK = { coins:'🪙', pp:'🔵', sp:'⭐', gadget:'🔧', gem:'💎', credits:'🎟️' };
+const ICON_FALLBACK = { coins:'🪙', pp:'🔵', sp:'⭐', gadget:'🔧', gem:'💎', credits:'🎟️', hypercharge:'⚡' };
+const ICON_URL = {
+  coins:       'https://cdn.brawlify.com/general/Coins.png',
+  pp:          'https://cdn.brawlify.com/general/PowerPoints.png',
+  sp:          'https://cdn.brawlify.com/general/StarPower.png',
+  gadget:      'https://cdn.brawlify.com/general/Gadget.png',
+  gem:         'https://cdn.brawlify.com/general/Gems.png',
+  credits:     'https://cdn.brawlify.com/general/Credits.png',
+  hypercharge: 'https://cdn.brawlify.com/general/Hypercharge.png',
+};
 
 function icon(type, style='') {
   const fallback = ICON_FALLBACK[type] || '●';
+  const url = ICON_URL[type];
+  if(url) return `<img src="${url}" onerror="this.outerHTML='${fallback}'" style="width:16px;height:16px;vertical-align:middle;object-fit:contain;${style}" crossorigin="anonymous" loading="lazy" alt="${type}">`;
   return `<span style="font-size:14px;${style}">${fallback}</span>`;
 }
 
@@ -3087,11 +3098,11 @@ document.addEventListener('DOMContentLoaded',()=>{['resCoins','resPP','resGems',
       <div class="anl-section-title" style="margin-top:20px">⚡ BUDGET D'UPGRADE</div>
       <div class="anl-res-row">
         <div class="anl-res-item">
-          <span class="anl-res-emoji">🪙</span>
+          <span class="anl-res-emoji"><img src="https://cdn.brawlify.com/general/Coins.png" onerror="this.outerHTML='🪙'" style="width:20px;height:20px;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="coins"></span>
           <input type="number" class="anl-res-input" id="anlCoins" placeholder="Pièces" min="0">
         </div>
         <div class="anl-res-item">
-          <span class="anl-res-emoji">🔵</span>
+          <span class="anl-res-emoji"><img src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:20px;height:20px;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="pp"></span>
           <input type="number" class="anl-res-input" id="anlPP" placeholder="Power Points" min="0">
         </div>
       </div>
@@ -3133,7 +3144,7 @@ document.addEventListener('DOMContentLoaded',()=>{['resCoins','resPP','resGems',
           <input type="number" class="sim-res-input" id="simCoins" placeholder="Pièces" min="0">
         </div>
         <div class="sim-res-item">
-          <span class="sim-res-label">🔵</span>
+          <span class="sim-res-label"><img src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:18px;height:18px;object-fit:contain;vertical-align:middle" crossorigin="anonymous" loading="lazy" alt="pp"></span>
           <input type="number" class="sim-res-input" id="simPP" placeholder="Power Points" min="0">
         </div>
       </div>
@@ -3169,7 +3180,7 @@ document.addEventListener('DOMContentLoaded',()=>{['resCoins','resPP','resGems',
             <span class="sim-budget-cost" id="simCostCoins">—</span>
           </div>
           <div class="sim-budget-row">
-            <span class="sim-budget-label">🔵 Coût total (PP)</span>
+            <span class="sim-budget-label"><img src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:14px;height:14px;vertical-align:middle;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="pp"> Coût total (PP)</span>
             <span class="sim-budget-cost" id="simCostPP">—</span>
           </div>
           <div class="sim-budget-row" style="border-top:1px solid var(--border2);padding-top:8px;margin-top:4px;">
@@ -3177,7 +3188,7 @@ document.addEventListener('DOMContentLoaded',()=>{['resCoins','resPP','resGems',
             <span class="sim-budget-remain" id="simRemainCoins">—</span>
           </div>
           <div class="sim-budget-row">
-            <span class="sim-budget-label">🔵 Reste (PP)</span>
+            <span class="sim-budget-label"><img src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:14px;height:14px;vertical-align:middle;object-fit:contain" crossorigin="anonymous" loading="lazy" alt="pp"> Reste (PP)</span>
             <span class="sim-budget-remain" id="simRemainPP">—</span>
           </div>
         </div>
