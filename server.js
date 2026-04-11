@@ -9,8 +9,8 @@ http.createServer((req, res) => {
 
   const url = new URL(req.url, 'http://x');
 
-  // Route GET /ip → retourne l'IP publique du serveur
-  if (url.pathname === '/ip') {
+  // Route GET / → retourne l'IP publique du serveur
+  if (url.pathname === '/') {
     https.get('https://api.ipify.org?format=json', r => {
       let b = ''; r.on('data', c => b += c);
       r.on('end', () => res.end(b));
