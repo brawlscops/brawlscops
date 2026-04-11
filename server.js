@@ -9,6 +9,8 @@ http.createServer((req, res) => {
 
   const url = new URL(req.url, 'http://x');
 
+  console.log(`[HIT] ${req.method} ${req.url}`);
+
   // Route GET / sans tag → retourne l'IP publique du serveur
   if (url.pathname === '/' && !url.searchParams.get('tag')) {
     https.get('https://api.ipify.org?format=json', r => {
@@ -23,7 +25,12 @@ http.createServer((req, res) => {
     const tag = url.searchParams.get('tag') || '';
     if (!tag) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing tag' })); return; }
 
-    const encoded = encodeURIComponent(tag.startsWith('#') ? tag : '#' + tag);
+    const cleanTag = tag.startsWith('#') ? tag : '#' + tag;
+    const encoded = encodeURIComponent(cleanTag);
+
+    console.log(`[REQUEST] tag="${cleanTag}" encoded="${encoded}"`);
+    console.log(`[TOKEN] défini: ${!!BS_TOKEN}, longueur: ${BS_TOKEN ? BS_TOKEN.length : 0}`);
+
     https.get({
       hostname: 'api.brawlstars.com',
       path: `/v1/players/${encoded}`,
@@ -31,8 +38,16 @@ http.createServer((req, res) => {
     }, (r) => {
       let body = '';
       r.on('data', c => body += c);
-      r.on('end', () => { res.writeHead(r.statusCode); res.end(body); });
-    }).on('error', e => { res.writeHead(500); res.end(JSON.stringify({ error: e.message })); });
+      r.on('end', () => {
+        console.log(`[RESPONSE] status=${r.statusCode} body=${body.substring(0, 300)}`);
+        res.writeHead(r.statusCode);
+        res.end(body);
+      });
+    }).on('error', e => {
+      console.log(`[ERROR] ${e.message}`);
+      res.writeHead(500);
+      res.end(JSON.stringify({ error: e.message }));
+    });
     return;
   }
 
@@ -42,4 +57,5 @@ http.createServer((req, res) => {
 
 }).listen(process.env.PORT || 3000, () => {
   console.log(`Server running on port ${process.env.PORT || 3000}`);
+  console.log(`BS_TOKEN défini: ${!!BS_TOKEN}`);
 });
