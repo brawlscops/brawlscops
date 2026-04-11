@@ -468,6 +468,36 @@ header {
 .rarity-epic       { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
 .rarity-mythic     { background: rgba(251,113,133,0.15); color: #fb7185; border: 1px solid rgba(251,113,133,0.35); }
 .rarity-legendary  { background: rgba(250,204,21,0.18); color: #facc15; border: 1px solid rgba(250,204,21,0.4); box-shadow: 0 0 8px rgba(250,204,21,0.15); }
+@keyframes rainbow-text {
+  0%   { color: #ff4757; }
+  15%  { color: #ff7f50; }
+  30%  { color: #ffd700; }
+  45%  { color: #7fff00; }
+  60%  { color: #00cfff; }
+  75%  { color: #a78bfa; }
+  90%  { color: #ff69b4; }
+  100% { color: #ff4757; }
+}
+@keyframes rainbow-border {
+  0%   { border-color: #ff4757; box-shadow: 0 0 10px rgba(255,71,87,0.5); }
+  15%  { border-color: #ff7f50; box-shadow: 0 0 10px rgba(255,127,80,0.5); }
+  30%  { border-color: #ffd700; box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+  45%  { border-color: #7fff00; box-shadow: 0 0 10px rgba(127,255,0,0.5); }
+  60%  { border-color: #00cfff; box-shadow: 0 0 10px rgba(0,207,255,0.5); }
+  75%  { border-color: #a78bfa; box-shadow: 0 0 10px rgba(167,139,250,0.5); }
+  90%  { border-color: #ff69b4; box-shadow: 0 0 10px rgba(255,105,180,0.5); }
+  100% { border-color: #ff4757; box-shadow: 0 0 10px rgba(255,71,87,0.5); }
+}
+.rarity-ultra-legendary {
+  background: rgba(255,255,255,0.07);
+  animation: rainbow-text 3s linear infinite, rainbow-border 3s linear infinite;
+  border: 1px solid;
+  font-weight: 900;
+}
+.brawler-card.rarity-ultra-legendary {
+  animation: rainbow-border 3s linear infinite;
+  border-width: 2px;
+}
 
 /* ══════════════════════════════════════
    PRIORITY LIST
@@ -1934,7 +1964,7 @@ const META_TIERS = {
   S: ['CLANCY', 'MELODIE', 'MICO', 'LILY', 'KIT', 'ANGELO', 'CHUCK', 'LARRY & LAWRIE', 'DRACO', 'KENJI', 'SHADE', 'SIRIUS'],
   A: ['BIBI', 'LEON', 'CROW', 'BULL', 'CHESTER', 'NAJIA', 'BO', 'AMBER', 'GENE', 'MORTIS', 'SANDY', 'FRANK', 'BUZZ', 'BROCK', 'SURGE', 'BELLE', 'COLETTE', 'GRIFF', 'MANDY', 'JANET', 'SAM', 'LOU', 'GRAY', 'DOUG', 'PEARL', 'MAISIE', 'FANG', 'BERRY', 'JUJU', 'WILLOW', 'LUMI', 'KAZE', 'EMZ', 'RICO', 'PIERCE'],
   B: ['SHELLY', 'COLT', 'NITA', 'BARLEY', 'POCO', 'DARRYL', 'PENNY', 'CARL', 'JACKY', 'GALE', 'MAX', 'MR. P', 'SPROUT', 'TARA', 'SQUEAK', 'ASH', 'LOLA', 'RUFFS', 'EVE', 'OTIS', 'BONNIE', 'MEG', 'CORDELIUS', 'CHARLIE', 'ZIGGY'],
-  C: ['JESSIE', 'DYNAMIKE', 'TICK', 'EL PRIMO', 'ROSA', 'PIPER', 'PAM', '8-BIT', 'STU', 'GROM', 'BUSTER', 'HANK', 'WATTSON'],
+  C: ['JESSIE', 'DYNAMIKE', 'TICK', 'EL PRIMO', 'ROSA', 'PIPER', 'PAM', '8-BIT', 'STU', 'GROM', 'BUSTER', 'HANK'],
   D: ['SPIKE']
 };
 
@@ -2019,7 +2049,7 @@ const BRAWLER_RARITY = {
   'CHARLIE':'mythic','CHUCK':'mythic','HANK':'mythic','PEARL':'mythic',
   'CLANCY':'mythic','JUJU':'mythic','WILLOW':'mythic','BERRY':'mythic',
   'KAZE':'mythic','NAJIA':'mythic','ZIGGY':'mythic','LUMI':'mythic',
-  'DOUG':'mythic','MANDY':'mythic','MAISIE':'mythic','WATTSON':'mythic',
+  'DOUG':'mythic','MANDY':'mythic','MAISIE':'mythic',
   // Epic
   'PIPER':'epic','PAM':'epic','FRANK':'epic','BIBI':'epic',
   'MORTIS':'epic','TARA':'epic','GENE':'epic',
@@ -2046,7 +2076,7 @@ function getBrawlerRarity(name) {
 }
 
 function getRarityLabel(r) {
-  return {'legendary':'LÉGENDAIRE','mythic':'MYTHIQUE','epic':'ÉPIQUE','super-rare':'SUPER RARE','rare':'RARE','common':'COMMUN'}[r]||'RARE';
+  return {'ultra-legendary':'ULTRA LÉGENDAIRE','legendary':'LÉGENDAIRE','mythic':'MYTHIQUE','epic':'ÉPIQUE','super-rare':'SUPER RARE','rare':'RARE','common':'COMMUN'}[r]||'RARE';
 }
 
 function getBrawlerTier(name) {
@@ -2122,9 +2152,12 @@ function computePriorityScore(b, allBrawlers) {
     if(maxedInRole < avgMaxed * 0.5) raw += 0.2;
   }
 
-  // Bonus trophées bas (<100) : brawler peu joué = priorité pour l'équilibrer
-  if((b.trophies||0) < 100) raw += 0.8;
-  else if((b.trophies||0) < 200) raw += 0.4;
+  // Bonus trophées bas (<999) : brawler peu joué = priorité pour l'équilibrer
+  const t = b.trophies || 0;
+  if(t < 100)      raw += 1.5;
+  else if(t < 300) raw += 1.0;
+  else if(t < 500) raw += 0.6;
+  else if(t < 999) raw += 0.3;
 
   // Plafond à 10, arrondi à 1 décimale
   return Math.round(Math.min(10, raw) * 10) / 10;
@@ -2286,11 +2319,10 @@ const ICON_URL = {
   credits:     'https://cdn.brawlify.com/general/Credits.png',
   hypercharge: 'https://cdn.brawlify.com/general/Hypercharge.png',
 };
-
-function icon(type, style='') {
+function icon(type, size='16px', style='') {
   const fallback = ICON_FALLBACK[type] || '●';
   const url = ICON_URL[type];
-  if(url) return `<img src="${url}" onerror="this.outerHTML='${fallback}'" style="width:16px;height:16px;vertical-align:middle;object-fit:contain;${style}" crossorigin="anonymous" loading="lazy" alt="${type}">`;
+  if(url) return `<img src="${url}" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span>${fallback}</span>')" style="width:${size};height:${size};vertical-align:middle;object-fit:contain;${style}" crossorigin="anonymous" loading="lazy" alt="${type}">`;
   return `<span style="font-size:14px;${style}">${fallback}</span>`;
 }
 
