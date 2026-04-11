@@ -22,6 +22,7 @@ http.createServer((req, res) => {
   if (url.pathname === '/player' || url.pathname === '/') {
     const tag = url.searchParams.get('tag') || '';
     if (!tag) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing tag' })); return; }
+    if (!BS_TOKEN) { res.writeHead(500); res.end(JSON.stringify({ error: 'BS_TOKEN not configured on server' })); return; }
 
     const encoded = encodeURIComponent(tag.startsWith('#') ? tag : '#' + tag);
     https.get({

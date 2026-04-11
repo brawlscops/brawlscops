@@ -1778,7 +1778,7 @@ footer {
     <!-- TAB META -->
     <div class="tab-content" id="tab-meta">
       <div class="section-header">
-        <span class="section-title" data-i18n="metaApril">MÉTA MAI 2026</span>
+        <span class="section-title" data-i18n="metaLabel">MÉTA MAI 2026</span>
       </div>
       <div id="metaGrid"></div>
     </div>
@@ -1868,7 +1868,7 @@ const TRANSLATIONS = {
     tabMeta: "MÉTA",
     upgradeOrder: "ORDRE D'UPGRADE",
     yourBrawlers: "TES BRAWLERS",
-    metaApril: "MÉTA MAI 2026",
+    metaLabel: "MÉTA MAI 2026",
     aiAnalysis: "ANALYSE GROQ AI",
     aiLoading: "Analyse en cours...",
     errNoTag: "Entre d'abord ton tag de joueur !",
@@ -1909,7 +1909,7 @@ const TRANSLATIONS = {
     tabMeta: "META",
     upgradeOrder: "UPGRADE ORDER",
     yourBrawlers: "YOUR BRAWLERS",
-    metaApril: "META MAY 2026",
+    metaLabel: "META MAY 2026",
     aiAnalysis: "GROQ AI ANALYSIS",
     aiLoading: "Analyzing...",
     errNoTag: "Please enter your player tag first!",
@@ -1942,7 +1942,7 @@ const TRANSLATIONS = {
     analyze: "ANALIZAR", loading: "ANALIZANDO...",
     trophies: "Trofeos", brawlers: "Brawlers", level: "Nivel", victories: "Victorias 3v3",
     tabPriorities: "PRIORIDADES", tabBrawlers: "BRAWLERS", tabMeta: "META",
-    upgradeOrder: "ORDEN DE MEJORA", yourBrawlers: "TUS BRAWLERS", metaApril: "META MAYO 2026",
+    upgradeOrder: "ORDEN DE MEJORA", yourBrawlers: "TUS BRAWLERS", metaLabel: "META MAYO 2026",
     aiAnalysis: "ANÁLISIS GROQ AI", aiLoading: "Analizando...",
     errNoTag: "Ingresa tu tag primero!", errNotFound: "Jugador no encontrado.",
     errApi: "Error de API. Inténtalo de nuevo.",
@@ -2041,7 +2041,7 @@ function getPlayerIconWithFallback(imgEl, iconId) {
 
 const BRAWLER_RARITY = {
   // Ultra Legendary
-  'SIRIUS':'ultra-legendary','CASE':'ultra-legendary',
+  'SIRIUS':'ultra-legendary',
   // Legendary
   'SPIKE':'legendary','CROW':'legendary','LEON':'legendary','SANDY':'legendary',
   'AMBER':'legendary','MEG':'legendary','CHESTER':'legendary','CORDELIUS':'legendary',
@@ -2063,23 +2063,20 @@ const BRAWLER_RARITY = {
   'MORTIS':'epic','TARA':'epic','GENE':'epic',
   'PENNY':'epic','CARL':'epic','JACKY':'epic','GALE':'epic',
   'EMZ':'epic','STU':'epic','SURGE':'epic','COLETTE':'epic',
-  'NANI':'epic','EDGAR':'epic','BEA':'epic','BELLE2':'epic',
+  'NANI':'epic','EDGAR':'epic','BEA':'epic',
   // Super Rare
   'COLT':'super-rare','NITA':'super-rare','BULL':'super-rare',
   'BROCK':'super-rare','RICO':'super-rare','DARRYL':'super-rare',
   '8-BIT':'super-rare','TICK':'super-rare','BARLEY':'super-rare',
   'POCO':'super-rare','ROSA':'super-rare','DYNAMIKE':'super-rare',
   'EL PRIMO':'super-rare','JESSIE':'super-rare','BO':'super-rare',
-  'PENNY2':'super-rare','CARL2':'super-rare','JACKY2':'super-rare',
   // Rare
-  'SHELLY':'rare','COLT2':'rare',
+  'SHELLY':'rare',
 };
 
 function getBrawlerRarity(name) {
   const u = name.toUpperCase();
-  for(const [k,v] of Object.entries(BRAWLER_RARITY)) {
-    if(u===k||u.includes(k)||k.includes(u)) return v;
-  }
+  if (BRAWLER_RARITY[u]) return BRAWLER_RARITY[u];
   return 'rare';
 }
 
@@ -2090,7 +2087,7 @@ function getRarityLabel(r) {
 function getBrawlerTier(name) {
   const u = name.toUpperCase();
   for(const [tier,list] of Object.entries(META_TIERS)) {
-    if(list.some(b => u.includes(b)||b.includes(u))) return tier;
+    if(list.includes(u)) return tier;
   }
   return 'C';
 }
@@ -2109,7 +2106,7 @@ const BRAWLER_ROLES = {
 function getBrawlerRole(name) {
   const u = name.toUpperCase();
   for(const [role,list] of Object.entries(BRAWLER_ROLES))
-    if(list.some(b=>u.includes(b)||b.includes(u))) return role;
+    if(list.includes(u)) return role;
   return 'FIGHTER';
 }
 
@@ -2184,9 +2181,8 @@ function getPowerBarClass(b, hasHC) {
 }
 
 function hasHypercharge(b) {
-  return b.hypercharge===true ||
-    (b.gears&&b.gears.some(g=>g.name&&g.name.toLowerCase().includes('hyper'))) ||
-    (b.mastery&&b.mastery>=10000);
+  return b.hypercharge === true ||
+    (b.gears && b.gears.some(g => g.name && g.name.toLowerCase().includes('hyper')));
 }
 
 const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjAzOWYyOGQ5LWFiY2EtNGY5YS05MjMzLTk4Y2IwZTZiZGQxMyIsImlhdCI6MTc3NTQwMDM0Miwic3ViIjoiZGV2ZWxvcGVyLzA5ZjQzNzk4LWE2NTAtNjBlZC01ZDg4LWE0OTJhODIyOGU2MSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMC4wLjAuMCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.TYkwxAQx-VZcyp3pg6bo_wId45jRbiitHickr4QItyBMdCVR44z2IpBnfHIioIC_j9GuphkOwxYOrgZ40Y3qmA';
@@ -2209,14 +2205,14 @@ async function fetchPlayer() {
     if(res.status===404) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
-      showStatus('❌ Joueur introuvable. Vérifie ton tag.','error');
+      showStatus('❌ ' + t('errNotFound'), 'error');
       return;
     }
     if(!res.ok) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
       const txt = await res.text();
-      showStatus(`❌ Erreur ${res.status}: ${txt}`, 'error');
+      showStatus(`❌ ${t('errApi')} (${res.status})`, 'error');
       return;
     }
     data = await res.json();
@@ -2797,7 +2793,7 @@ const LEVEL_STATS = {
   2:  { hp_pct: 0.64, dmg_pct: 0.64 },
   3:  { hp_pct: 0.70, dmg_pct: 0.70 },
   4:  { hp_pct: 0.75, dmg_pct: 0.75 },
-  5:  { hp_pct: 0.80, dmg_pct: 0.80 },  // SP disponibles
+  5:  { hp_pct: 0.80, dmg_pct: 0.80 },
   6:  { hp_pct: 0.84, dmg_pct: 0.84 },
   7:  { hp_pct: 0.88, dmg_pct: 0.88 },  // Gadgets disponibles
   8:  { hp_pct: 0.92, dmg_pct: 0.92 },
@@ -2964,7 +2960,7 @@ function runSimulation() {
 
   if (levelsGained === 0) {
     verdictEl.className = 'sim-verdict bad';
-    verdictEl.textContent = `❌ Budget insuffisant pour monter même d'un niveau. Il te manque ${(UPGRADE_COSTS[brawler.power]?.coins - coins).toLocaleString()} pièces et/ou ${(UPGRADE_COSTS[brawler.power]?.pp - pp).toLocaleString()} PP pour le prochain niveau.`;
+    verdictEl.textContent = `❌ Budget insuffisant pour monter même d'un niveau. Il te manque ${Math.max(0, (UPGRADE_COSTS[brawler.power]?.coins ?? 0) - coins).toLocaleString()} pièces et/ou ${Math.max(0, (UPGRADE_COSTS[brawler.power]?.pp ?? 0) - pp).toLocaleString()} PP pour le prochain niveau.`;
   } else if (targetLevel === 11) {
     verdictEl.className = 'sim-verdict max';
     verdictEl.textContent = `⚡ PARFAIT ! Tu peux maxer ${brawler.name} complètement (+${levelsGained} niveaux) ! Il te restera ${remainCoins.toLocaleString()} pièces et ${remainPP.toLocaleString()} PP pour d'autres upgrades.`;
