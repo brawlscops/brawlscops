@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRAWLSCOPS — Téléchargement</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090f;
+  --surface: #0d1120;
+  --surface2: #141a2e;
+  --gold: #f7c948;
+  --orange: #ff7043;
+  --blue: #29d4ff;
+  --purple: #a78bfa;
+  --text: #f1f5f9;
+  --muted: #64748b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── ANIMATED BACKGROUND ── */
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(247,201,72,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 80% at -10% 50%, rgba(41,212,255,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 80% at 110% 60%, rgba(167,139,250,0.06) 0%, transparent 55%);
+}
+.grid-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(247,201,72,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247,201,72,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Floating particles */
+.particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float linear infinite;
+}
+@keyframes float {
+  from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  to { transform: translateY(-20px) rotate(720deg); opacity: 0; }
+}
+
+/* ── HEADER ── */
+header {
+  position: relative; z-index: 10;
+  padding: 20px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(247,201,72,0.1);
+  background: rgba(7,9,15,0.7);
+  backdrop-filter: blur(20px);
+}
+.logo {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #f7c948, #ff7043);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+.logo-sub {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  font-family: 'Rajdhani', sans-serif;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+.header-badge {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: rgba(41,212,255,0.08);
+  border: 1px solid rgba(41,212,255,0.25);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--blue);
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 1px;
+}
+.dot-live {
+  width: 6px; height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+  animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 80px 24px 60px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  display: inline-block;
+  padding: 5px 18px;
+  background: rgba(167,139,250,0.1);
+  border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--purple);
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 2px;
+  margin-bottom: 28px;
+  animation: fadeIn 0.6s ease;
+}
+
+.hero-title {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: clamp(38px, 8vw, 88px);
+  line-height: 1.0;
+  margin-bottom: 10px;
+  animation: fadeIn 0.7s ease;
+}
+.hero-title .line1 {
+  background: linear-gradient(135deg, #f7c948 0%, #ff9a38 50%, #ff7043 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+.hero-title .line2 {
+  color: rgba(241,245,249,0.15);
+  display: block;
+  font-size: 0.55em;
+  letter-spacing: 6px;
+}
+
+.hero-desc {
+  font-size: clamp(14px, 2.5vw, 18px);
+  color: #94a3b8;
+  max-width: 560px;
+  margin: 24px auto 48px;
+  line-height: 1.7;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 400;
+  animation: fadeIn 0.8s ease;
+}
+
+/* ── MAIN DOWNLOAD CARD ── */
+.download-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(20,26,46,0.9) 0%, rgba(13,17,32,0.95) 100%);
+  border: 1px solid rgba(247,201,72,0.25);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 620px;
+  margin: 0 auto 60px;
+  box-shadow:
+    0 0 0 1px rgba(247,201,72,0.08),
+    0 32px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(247,201,72,0.1);
+  animation: slideUp 0.8s ease;
+  overflow: hidden;
+}
+.download-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #f7c948, #ff7043, #a78bfa, #29d4ff);
+  border-radius: 24px 24px 0 0;
+}
+.download-card::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(247,201,72,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.file-info {
+  display: flex; align-items: center; gap: 20px;
+  margin-bottom: 32px;
+  padding: 16px 20px;
+  background: rgba(7,9,15,0.5);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+}
+.file-icon {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, rgba(247,201,72,0.15), rgba(255,112,67,0.1));
+  border: 1px solid rgba(247,201,72,0.25);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.file-details { flex: 1; }
+.file-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+.file-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'Rajdhani', sans-serif;
+}
+.file-size-badge {
+  padding: 4px 10px;
+  background: rgba(41,212,255,0.08);
+  border: 1px solid rgba(41,212,255,0.2);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--blue);
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+}
+
+/* ── DOWNLOAD BUTTON ── */
+.dl-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 32px;
+  background: linear-gradient(135deg, #f7c948 0%, #ff9a38 50%, #ff7043 100%);
+  border: none;
+  border-radius: 14px;
+  color: #000;
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(247,201,72,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.dl-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.dl-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(247,201,72,0.45); }
+.dl-btn:hover::before { opacity: 1; }
+.dl-btn:active { transform: translateY(0); }
+.dl-icon { font-size: 20px; }
+.dl-btn-sub { font-size: 9px; letter-spacing: 1px; opacity: 0.7; margin-top: 2px; font-weight: 400; }
+.dl-btn-inner { display: flex; flex-direction: column; align-items: center; }
+
+.dl-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Rajdhani', sans-serif;
+  line-height: 1.5;
+}
+.dl-note a { color: var(--blue); text-decoration: none; }
+
+/* ── FEATURES GRID ── */
+.features {
+  position: relative; z-index: 1;
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+.features-title {
+  text-align: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  text-transform: uppercase;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.feature-card {
+  background: rgba(13,17,32,0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.25s;
+  animation: fadeIn 1s ease;
+}
+.feature-card:hover {
+  border-color: rgba(247,201,72,0.2);
+  background: rgba(20,26,46,0.8);
+  transform: translateY(-2px);
+}
+.feature-icon { font-size: 28px; margin-bottom: 12px; }
+.feature-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.feature-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* ── INSTRUCTIONS ── */
+.instructions {
+  position: relative; z-index: 1;
+  max-width: 680px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+.instructions-title {
+  text-align: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  text-transform: uppercase;
+}
+.steps { display: flex; flex-direction: column; gap: 12px; }
+.step {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 20px;
+  background: rgba(13,17,32,0.6);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+.step:hover { border-color: rgba(41,212,255,0.15); }
+.step-num {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, rgba(41,212,255,0.15), rgba(41,212,255,0.05));
+  border: 1px solid rgba(41,212,255,0.3);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.step-text { flex: 1; }
+.step-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.step-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-family: 'Rajdhani', sans-serif;
+}
+.step-desc strong { color: var(--gold); }
+
+/* ── COMPAT BADGES ── */
+.compat {
+  position: relative; z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+  padding: 0 24px;
+}
+.compat-badge {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: rgba(13,17,32,0.7);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 30px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.compat-badge .icon { font-size: 18px; }
+.compat-ok { color: #4ade80; font-size: 11px; margin-left: 4px; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'Rajdhani', sans-serif;
+}
+footer a { color: var(--blue); text-decoration: none; }
+.footer-logo {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 14px;
+  background: linear-gradient(90deg, #f7c948, #ff7043);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #4ade80;
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+
+  /* ── CHANGELOG ── */
+  .changelog-section {
+    position: relative; z-index: 1;
+    max-width: 680px;
+    margin: 0 auto 60px;
+    padding: 0 24px;
+  }
+  .changelog-card {
+    background: rgba(13,17,32,0.7);
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .changelog-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #a78bfa, #29d4ff);
+  }
+  .changelog-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
+  }
+  .changelog-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px; font-weight: 700;
+    color: #a78bfa; letter-spacing: 2px;
+  }
+  .changelog-ver-badge {
+    padding: 3px 10px;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 12px;
+    font-family: 'Orbitron', monospace;
+    font-size: 10px; font-weight: 700;
+    color: #a78bfa; letter-spacing: 1px;
+  }
+  .changelog-date {
+    font-size: 10px; color: var(--muted);
+    font-family: 'Rajdhani', sans-serif;
+  }
+  .changelog-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .changelog-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12px; color: #94a3b8;
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.4;
+  }
+  .changelog-item::before {
+    content: '▸';
+    color: #a78bfa;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 10px;
+  }
+  /* Update checker status */
+  .update-status {
+    margin-top: 12px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 1px;
+    display: none;
+  }
+  .update-status.up-to-date {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.2);
+    color: #4ade80;
+  }
+  .update-status.needs-update {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(247,201,72,0.08);
+    border: 1px solid rgba(247,201,72,0.3);
+    color: #f7c948;
+  }
+
+  /* ── MOBILE ── */
+@media (max-width: 600px) {
+  header { padding: 16px 20px; }
+  .hero { padding: 50px 20px 40px; }
+  .download-card { padding: 28px 20px; margin: 0 16px 48px; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="bg-layer"></div>
+<div class="grid-layer"></div>
+<div class="particles" id="particles"></div>
+
+<!-- Header -->
+<header>
+  <div>
+    <a class="logo" href="#">BRAWLSCOPS</a>
+    <div class="logo-sub">by FLAZEOX</div>
+  </div>
+  <div class="header-badge">
+    <div class="dot-live"></div>
+    <span id="hdr-version">v1.1.0</span> · STABLE
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-tag">⚡ SMART UPGRADE ADVISOR</div>
+  <h1 class="hero-title">
+    <span class="line1">BRAWLSCOPS</span>
+    <span class="line2">UPGRADE · ANALYZE · DOMINATE</span>
+  </h1>
+  <p class="hero-desc">
+    L'outil d'analyse ultime pour Brawl Stars.<br>
+    Télécharge l'application — ouvre-la dans ton navigateur, c'est tout.
+  </p>
+
+  <!-- Download Card -->
+  <div class="download-card">
+    <!-- File info -->
+    <div class="file-info">
+      <div class="file-icon">🎮</div>
+      <div class="file-details">
+        <div class="file-name">BRAWLSCOPS.html</div>
+        <div class="file-meta">Application web autonome · Fonctionne hors-ligne · <span id="dl-version">v1.1.0</span></div>
+      </div>
+      <div class="file-size-badge">~3 MB</div>
+    </div>
+
+    <!-- Download button -->
+    <a class="dl-btn" id="dl-btn" href="BRAWLSCOPS.html" download="BRAWLSCOPS.html" onclick="triggerDownload(event)">
+      <span class="dl-icon">⬇️</span>
+      <div class="dl-btn-inner">
+        <span>TÉLÉCHARGER L'APP</span>
+        <span class="dl-btn-sub">BRAWLSCOPS.html · ~3 MB</span>
+      </div>
+    </a>
+
+    <p class="dl-note">
+      Fichier HTML unique · Aucune installation requise · Fonctionne sur PC &amp; Android<br>
+      <a href="https://youtube.com/@flaneox" target="_blank">@FLAZEOX</a> · Non affilié à Supercell
+    </p>
+  </div>
+</section>
+
+<!-- Compatibility badges -->
+<div class="compat">
+  <div class="compat-badge"><span class="icon">🖥️</span> Windows <span class="compat-ok">✓</span></div>
+  <div class="compat-badge"><span class="icon">🍎</span> macOS <span class="compat-ok">✓</span></div>
+  <div class="compat-badge"><span class="icon">🐧</span> Linux <span class="compat-ok">✓</span></div>
+  <div class="compat-badge"><span class="icon">📱</span> Android <span class="compat-ok">✓</span></div>
+  <div class="compat-badge"><span class="icon">📲</span> PWA Installable <span class="compat-ok">✓</span></div>
+</div>
+
+<!-- Features -->
+<section class="features">
+  <div class="features-title">— CE QUE FAIT L'APP —</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-name">PRIORITÉS D'UPGRADE</div>
+      <div class="feature-desc">Classement intelligent de tes brawlers à améliorer en priorité selon le méta actuel.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-name">IA GROQ — ANALYSE</div>
+      <div class="feature-desc">Analyse par brawler avec llama-3.3-70b. Conseils personnalisés sur chaque upgrade.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-name">SIMULATEUR D'UPGRADE</div>
+      <div class="feature-desc">Simule le coût max d'un upgrade selon ton budget en pièces et Power Points.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-name">META TIER LIST</div>
+      <div class="feature-desc">Tier list S/A/B/C/D mise à jour avec les brawlers les plus forts du moment.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-name">TABLEAU DE BORD</div>
+      <div class="feature-desc">Vue complète de tes ressources : pièces, PP, gems, crédits et progression.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📴</div>
+      <div class="feature-name">MODE HORS-LIGNE</div>
+      <div class="feature-desc">Cache automatique des données. Consulte ton profil même sans connexion.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Changelog -->
+<section class="changelog-section">
+  <div class="changelog-card">
+    <div class="changelog-header">
+      <div class="changelog-title">📋 CHANGELOG</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="changelog-ver-badge" id="cl-version">v1.1.0</span>
+        <span class="changelog-date" id="cl-date">11 avril 2026</span>
+      </div>
+    </div>
+    <ul class="changelog-list" id="changelog-list">
+      <li class="changelog-item">Images des ressources intégrées hors-ligne (Coins, PP, Gems...)</li>
+      <li class="changelog-item">Support PWA — installable sur Android et PC</li>
+      <li class="changelog-item">Optimisations mobile et mode hors-ligne</li>
+      <li class="changelog-item">Bannière d'installation automatique</li>
+    </ul>
+    <div class="update-status up-to-date" id="update-status-ok">
+      ✅ Cette page affiche la dernière version disponible
+    </div>
+  </div>
+</section>
+
+<!-- How to use -->
+<section class="instructions">
+  <div class="instructions-title">— COMMENT UTILISER —</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <div class="step-title">TÉLÉCHARGE LE FICHIER</div>
+        <div class="step-desc">Clique sur le bouton ci-dessus. Le fichier <strong>BRAWLSCOPS.html</strong> (~3 MB) se télécharge sur ton appareil.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <div class="step-title">OUVRE DANS TON NAVIGATEUR</div>
+        <div class="step-desc"><strong>PC :</strong> Double-clic sur le fichier → s'ouvre dans Chrome/Firefox/Edge.<br><strong>Android :</strong> Ouvre le fichier via le gestionnaire de fichiers → ouvrir avec Chrome.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <div class="step-title">ENTRE TON TAG BRAWL STARS</div>
+        <div class="step-desc">Tape ton <strong>#TAG</strong> dans la barre de recherche et clique sur <strong>ANALYSER</strong>.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">
+        <div class="step-title">OPTIONNEL — INSTALLER COMME APP</div>
+        <div class="step-desc">Sur Android Chrome : menu ⋮ → <strong>"Ajouter à l'écran d'accueil"</strong>. Sur PC Chrome : icône d'installation dans la barre d'adresse. L'app se comporte comme une vraie application !</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-text">
+        <div class="step-title">OPTIONNEL — CLÉ GROQ AI</div>
+        <div class="step-desc">Pour activer l'analyse IA, obtiens une clé gratuite sur <strong>console.groq.com</strong> et entre-la dans ⚙️ Paramètres.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">BRAWLSCOPS</div>
+  <div>Créé par <a href="https://youtube.com/@flaneox" target="_blank">FLAZEOX</a> · Non affilié à Supercell</div>
+  <div style="margin-top:6px">Images © Brawlify CDN / Supercell Fan Content Policy</div>
+</footer>
+
+<!-- Toast notification -->
+<div id="toast">✅ TÉLÉCHARGEMENT LANCÉ !</div>
+
+<script>
+
+// ═══════════════════════════════════════
+// VERSION CHECKER on download page
+// ═══════════════════════════════════════
+const VERSION_JSON_URL = 'https://flazeox.github.io/brawlscops/version.json';
+const CURRENT_PAGE_VER = '1.1.0';
+
+async function loadVersionInfo() {
+  try {
+    const r = await fetch(VERSION_JSON_URL + '?t=' + Date.now(), {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(6000)
+    });
+    if (!r.ok) return;
+    const data = await r.json();
+
+    // Update displayed version everywhere
+    ['hdr-version','dl-version','cl-version'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = 'v' + data.version;
+    });
+
+    // Update date
+    const dateEl = document.getElementById('cl-date');
+    if (dateEl && data.date) {
+      const d = new Date(data.date);
+      dateEl.textContent = d.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+    }
+
+    // Update changelog list
+    const list = document.getElementById('changelog-list');
+    if (list && data.changelog?.length) {
+      list.innerHTML = data.changelog.map(item =>
+        `<li class="changelog-item">${item}</li>`
+      ).join('');
+    }
+
+    // Update download link with correct filename
+    const dlBtn = document.getElementById('dl-btn');
+    if (dlBtn && data.download) {
+      dlBtn.href = data.download;
+      dlBtn.download = data.download;
+    }
+
+    // Show version status
+    const statusOk = document.getElementById('update-status-ok');
+    if (statusOk) statusOk.style.display = 'flex';
+
+  } catch(e) {
+    // Silently fail — use static content
+  }
+}
+
+// Load version info on page load
+loadVersionInfo();
+
+// Particles
+(function() {
+  const container = document.getElementById('particles');
+  const colors = ['rgba(247,201,72,', 'rgba(255,112,67,', 'rgba(41,212,255,', 'rgba(167,139,250,'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 4 + 2;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const opacity = Math.random() * 0.4 + 0.1;
+    p.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      background: ${color}${opacity});
+      animation-duration: ${Math.random() * 20 + 15}s;
+      animation-delay: ${Math.random() * -20}s;
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// Download trigger
+function triggerDownload(e) {
+  // Show toast
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// Check if BRAWLSCOPS.html exists on same server, fallback message
+document.getElementById('dl-btn').addEventListener('click', function(e) {
+  triggerDownload(e);
+});
+</script>
+</body>
+</html>

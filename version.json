@@ -1,0 +1,12 @@
+{
+  "version": "1.1.0",
+  "date": "2026-04-11",
+  "changelog": [
+    "Images des ressources intégrées hors-ligne (Coins, PP, Gems...)",
+    "Support PWA — installable sur Android et PC",
+    "Optimisations mobile et mode hors-ligne",
+    "Bannière d'installation automatique"
+  ],
+  "download": "BRAWLSCOPS.html",
+  "min_version": "1.0.0"
+}
