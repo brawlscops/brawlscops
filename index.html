@@ -468,7 +468,6 @@ header {
 .rarity-epic       { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.35); }
 .rarity-mythic     { background: rgba(251,113,133,0.15); color: #fb7185; border: 1px solid rgba(251,113,133,0.35); }
 .rarity-legendary  { background: rgba(250,204,21,0.18); color: #facc15; border: 1px solid rgba(250,204,21,0.4); box-shadow: 0 0 8px rgba(250,204,21,0.15); }
-.rarity-ultra-legendary { background: rgba(255,60,120,0.18); color: #ff3c78; border: 1px solid rgba(255,60,120,0.5); box-shadow: 0 0 10px rgba(255,60,120,0.2); }
 
 /* ══════════════════════════════════════
    PRIORITY LIST
@@ -1540,10 +1539,9 @@ footer {
       </button>
     </div>
     <div class="status-msg" id="statusMsg"></div>
-    <div id="savedTagArea" style="text-align:center;display:none">
-      <div class="saved-tag-chip" id="savedTagChip" onclick="loadSavedTag()">
-        🔖 <span id="savedTagText"></span>
-      </div>
+    <div id="savedTagArea" style="text-align:center;display:none;margin-top:8px">
+      <div style="font-size:10px;color:var(--text-muted);font-family:Orbitron,monospace;letter-spacing:1px;margin-bottom:6px">RECENT TAGS</div>
+      <div id="savedTagsList" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center"></div>
     </div>
     <div class="loader" id="loader">
       <div class="spinner"></div>
@@ -1654,19 +1652,19 @@ footer {
       <div style="font-size:10px;letter-spacing:2px;color:var(--text-muted);font-family:'Orbitron',monospace;margin-bottom:8px;">TON INVENTAIRE</div>
       <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
         <div style="display:flex;align-items:center;gap:6px;">
-          <img crossorigin="anonymous" src="https://cdn.brawlify.com/general/Coins.png" onerror="this.outerHTML='🪙'" style="width:18px;height:18px;object-fit:contain">
+          <span style="font-size:16px">🪙</span>
           <span id="summaryCoins" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent)">0</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <img crossorigin="anonymous" src="https://cdn.brawlify.com/general/PowerPoints.png" onerror="this.outerHTML='🔵'" style="width:18px;height:18px;object-fit:contain">
+          <span style="font-size:16px">🔵</span>
           <span id="summaryPP" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:var(--accent3)">0</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <img crossorigin="anonymous" src="https://cdn.brawlify.com/general/Gem.png" onerror="this.outerHTML='💎'" style="width:18px;height:18px;object-fit:contain">
+          <span style="font-size:16px">💎</span>
           <span id="summaryGems" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#a78bfa">0</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <img crossorigin="anonymous" src="https://cdn.brawlify.com/general/Credits.png" onerror="this.outerHTML='🎟️'" style="width:18px;height:18px;object-fit:contain">
+          <span style="font-size:16px">🎟️</span>
           <span id="summaryCredits" style="font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#ff7043">0</span>
         </div>
       </div>
@@ -1949,9 +1947,10 @@ const META_TIERS = {
 })();
 
 const UPGRADE_COSTS = {
-  9:{coins:1000,pp:550}, 8:{coins:750,pp:350}, 7:{coins:500,pp:200},
-  6:{coins:400,pp:150},  5:{coins:300,pp:100}, 4:{coins:200,pp:75},
-  3:{coins:150,pp:50},   2:{coins:100,pp:30},  1:{coins:60,pp:20},
+  1:{coins:60,pp:20},   2:{coins:100,pp:30},  3:{coins:150,pp:50},
+  4:{coins:200,pp:75},  5:{coins:300,pp:100}, 6:{coins:400,pp:150},
+  7:{coins:500,pp:200}, 8:{coins:750,pp:350}, 9:{coins:1000,pp:550},
+  10:{coins:1500,pp:650},
 };
 
 function getCostToMax(p) {
@@ -2003,45 +2002,39 @@ function getPlayerIconWithFallback(imgEl, iconId) {
 }
 
 const BRAWLER_RARITY = {
-  // ── ULTRA LEGENDARY ──
-  'KAZE':'ultra-legendary','SIRIUS':'ultra-legendary',
-
-  // ── LEGENDARY ──
+  // Ultra Legendary
+  'SIRIUS':'ultra-legendary','CASE':'ultra-legendary',
+  // Legendary
   'SPIKE':'legendary','CROW':'legendary','LEON':'legendary','SANDY':'legendary',
-  'SURGE':'legendary','AMBER':'legendary','MEG':'legendary','CHESTER':'legendary',
-  'CORDELIUS':'legendary','KIT':'legendary','DRACO':'legendary','KENJI':'legendary',
-  'PIERCE':'legendary',
-
-  // ── MYTHIC ──
-  'MORTIS':'mythic','TARA':'mythic','GENE':'mythic','MR. P':'mythic',
-  'MAX':'mythic','SPROUT':'mythic','LOU':'mythic','BYRON':'mythic',
-  'RUFFS':'mythic','SQUEAK':'mythic','BUZZ':'mythic','FANG':'mythic',
-  'EVE':'mythic','JANET':'mythic','OTIS':'mythic','BUSTER':'mythic',
-  'GRAY':'mythic','R-T':'mythic','WILLOW':'mythic','DOUG':'mythic',
-  'CHUCK':'mythic','CHARLIE':'mythic','MICO':'mythic','MELODIE':'mythic',
-  'LILY':'mythic','CLANCY':'mythic','MOE':'mythic','JUJU':'mythic',
-  'OLLIE':'mythic','LUMI':'mythic','FINX':'mythic','JAE-YONG':'mythic',
-  'ALLI':'mythic','MINA':'mythic','ZIGGY':'mythic','GIGI':'mythic',
-  'GLOWBERT':'mythic','NAJIA':'mythic',
-
-  // ── EPIC ──
-  'BO':'epic','PIPER':'epic','PAM':'epic','FRANK':'epic','BIBI':'epic',
-  'BEA':'epic','EMZ':'epic','GALE':'epic','NANI':'epic','COLETTE':'epic',
-  'EDGAR':'epic','STU':'epic','BELLE':'epic','GROM':'epic','GRIFF':'epic',
-  'ASH':'epic','LOLA':'epic','BONNIE':'epic','SAM':'epic','MANDY':'epic',
-  'MAISIE':'epic','HANK':'epic','PEARL':'epic','LARRY & LAWRIE':'epic',
-  'ANGELO':'epic','BERRY':'epic','SHADE':'epic','MEEPLE':'epic','TRUNK':'epic',
-
-  // ── SUPER RARE ──
+  'AMBER':'legendary','MEG':'legendary','CHESTER':'legendary','CORDELIUS':'legendary',
+  'KIT':'legendary','DRACO':'legendary','LILY':'legendary','LARRY & LAWRIE':'legendary',
+  'KENJI':'legendary','SHADE':'legendary',
+  // Mythic
+  'MAX':'mythic','MR. P':'mythic','SPROUT':'mythic','BYRON':'mythic',
+  'SQUEAK':'mythic','LOU':'mythic','RUFFS':'mythic','BELLE':'mythic',
+  'BUZZ':'mythic','GRIFF':'mythic','ASH':'mythic','LOLA':'mythic',
+  'FANG':'mythic','EVE':'mythic','JANET':'mythic','BONNIE':'mythic',
+  'OTIS':'mythic','SAM':'mythic','GROM':'mythic','BUSTER':'mythic',
+  'GRAY':'mythic','MELODIE':'mythic','ANGELO':'mythic','MICO':'mythic',
+  'CHARLIE':'mythic','CHUCK':'mythic','HANK':'mythic','PEARL':'mythic',
+  'CLANCY':'mythic','JUJU':'mythic','WILLOW':'mythic','BERRY':'mythic',
+  'KAZE':'mythic','NAJIA':'mythic','ZIGGY':'mythic','LUMI':'mythic',
+  'DOUG':'mythic','MANDY':'mythic','MAISIE':'mythic','WATTSON':'mythic',
+  // Epic
+  'PIPER':'epic','PAM':'epic','FRANK':'epic','BIBI':'epic',
+  'MORTIS':'epic','TARA':'epic','GENE':'epic',
+  'PENNY':'epic','CARL':'epic','JACKY':'epic','GALE':'epic',
+  'EMZ':'epic','STU':'epic','SURGE':'epic','COLETTE':'epic',
+  'NANI':'epic','EDGAR':'epic','BEA':'epic','BELLE2':'epic',
+  // Super Rare
   'COLT':'super-rare','NITA':'super-rare','BULL':'super-rare',
   'BROCK':'super-rare','RICO':'super-rare','DARRYL':'super-rare',
   '8-BIT':'super-rare','TICK':'super-rare','BARLEY':'super-rare',
   'POCO':'super-rare','ROSA':'super-rare','DYNAMIKE':'super-rare',
-  'EL PRIMO':'super-rare','JESSIE':'super-rare','PENNY':'super-rare',
-  'CARL':'super-rare','JACKY':'super-rare','GUS':'super-rare',
-
-  // ── STARTING BRAWLER ──
-  'SHELLY':'common',
+  'EL PRIMO':'super-rare','JESSIE':'super-rare','BO':'super-rare',
+  'PENNY2':'super-rare','CARL2':'super-rare','JACKY2':'super-rare',
+  // Rare
+  'SHELLY':'rare','COLT2':'rare',
 };
 
 function getBrawlerRarity(name) {
@@ -2053,7 +2046,7 @@ function getBrawlerRarity(name) {
 }
 
 function getRarityLabel(r) {
-  return {'ultra-legendary':'ULTRA LÉGENDAIRE','legendary':'LÉGENDAIRE','mythic':'MYTHIQUE','epic':'ÉPIQUE','super-rare':'SUPER RARE','rare':'RARE','common':'COMMUN'}[r]||'RARE';
+  return {'legendary':'LÉGENDAIRE','mythic':'MYTHIQUE','epic':'ÉPIQUE','super-rare':'SUPER RARE','rare':'RARE','common':'COMMUN'}[r]||'RARE';
 }
 
 function getBrawlerTier(name) {
@@ -2129,6 +2122,10 @@ function computePriorityScore(b, allBrawlers) {
     if(maxedInRole < avgMaxed * 0.5) raw += 0.2;
   }
 
+  // Bonus trophées bas (<100) : brawler peu joué = priorité pour l'équilibrer
+  if((b.trophies||0) < 100) raw += 0.8;
+  else if((b.trophies||0) < 200) raw += 0.4;
+
   // Plafond à 10, arrondi à 1 décimale
   return Math.round(Math.min(10, raw) * 10) / 10;
 }
@@ -2151,7 +2148,7 @@ function hasHypercharge(b) {
     (b.mastery&&b.mastery>=10000);
 }
 
-const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImY5NjY2YjY1LWVlMGEtNGFhZS1hMzVmLTU5MjRkOGUyNGI2MiIsImlhdCI6MTc3NTg0NDQ3NSwic3ViIjoiZGV2ZWxvcGVyLzQyYzcxOWY1LWJkNTYtZjJlYi0zMTM4LTdkOTdhZmEyMDgxYSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiNzQuMjIwLjUxLjAiLCI3NC4yMjAuNTkuMCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.cI9DNf6eoSOLpQVzod3V4ZVSyEqO_2qeIeSdE-CHzoupzxtwSTxtssUNwej-WztkpbGHNfz487JWvnNvpXdyng';
+const API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjAzOWYyOGQ5LWFiY2EtNGY5YS05MjMzLTk4Y2IwZTZiZGQxMyIsImlhdCI6MTc3NTQwMDM0Miwic3ViIjoiZGV2ZWxvcGVyLzA5ZjQzNzk4LWE2NTAtNjBlZC01ZDg4LWE0OTJhODIyOGU2MSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMC4wLjAuMCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.TYkwxAQx-VZcyp3pg6bo_wId45jRbiitHickr4QItyBMdCVR44z2IpBnfHIioIC_j9GuphkOwxYOrgZ40Y3qmA';
 
 async function fetchPlayer() {
   let tag = document.getElementById('tagInput').value.trim().toUpperCase();
@@ -2160,18 +2157,14 @@ async function fetchPlayer() {
   const enc = encodeURIComponent(tag);
 
   localStorage.setItem('saved_tag', tag);
-  const area = document.getElementById('savedTagArea');
-  const chipText = document.getElementById('savedTagText');
-  if(area&&chipText) { chipText.textContent=tag; area.style.display='block'; }
+  saveTagToHistory(tag);
 
   showLoader(true); hideStatus();
   document.getElementById('searchBtn').disabled = true;
   let data = null;
 
-  const PROXY_URL = window.BRAWLSCOPS_PROXY || 'https://brawlscops-vb8q.onrender.com';
-
   try {
-    const res = await fetch(`${PROXY_URL}/?tag=${enc}`);
+    const res = await fetch(`https://brawlscope.onrender.com/?tag=${enc}`);
     if(res.status===404) {
       showLoader(false);
       document.getElementById('searchBtn').disabled=false;
@@ -2280,37 +2273,13 @@ function renderDashboard(data) {
 }
 
 // ══════════════════════════════════════
-//  ICON HELPER — évite les SyntaxError dans les templates
+//  ICON HELPER — always emoji (reliable)
 // ══════════════════════════════════════
-const ICON_URLS = {
-  coins: 'https://cdn.brawlify.com/general/Coins.png',
-  pp: 'https://cdn.brawlify.com/general/PowerPoints.png',
-  sp: 'https://cdn.brawlify.com/general/StarPower.png',
-  gadget: 'https://cdn.brawlify.com/general/Gadget.png',
-  gem: 'https://cdn.brawlify.com/general/Gem.png',
-  credits: 'https://cdn.brawlify.com/general/Credits.png',
-};
 const ICON_FALLBACK = { coins:'🪙', pp:'🔵', sp:'⭐', gadget:'🔧', gem:'💎', credits:'🎟️' };
 
-// Pre-test icons on load and cache results
-const ICON_WORKS = {};
-function testIcons() {
-  Object.entries(ICON_URLS).forEach(([key, url]) => {
-    const img = new Image();
-    img.onload = () => { ICON_WORKS[key] = true; };
-    img.onerror = () => { ICON_WORKS[key] = false; };
-    img.src = url;
-  });
-}
-testIcons();
-
 function icon(type, style='') {
-  // Returns HTML for an icon — uses img if CDN works, else emoji span
-  const url = ICON_URLS[type];
-  const fallback = ICON_FALLBACK[type];
-  const extra = style ? ` style="${style}"` : '';
-  // We use a container with both img and span; CSS hides span when img loads
-  return `<span class="icon-wrap" data-type="${type}"${extra}><img class="res-icon" src="${url}" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.classList.add('failed')" alt="${type}"><span class="icon-emoji">${fallback}</span></span>`;
+  const fallback = ICON_FALLBACK[type] || '●';
+  return `<span style="font-size:14px;${style}">${fallback}</span>`;
 }
 
 function iconSp(owned) {
@@ -2639,6 +2608,9 @@ async function openAnalyser(brawler) {
   document.getElementById('anlOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 
+  // Render unlock selector
+  renderUnlockSelector(brawler);
+
   // Launch AI analysis
   const key = localStorage.getItem('groq_api_key') || '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';
   const prompt = `Tu es un expert Brawl Stars. Analyse le brawler "${brawler.name}" (niveau ${brawler.power}/11, ${brawler.trophies} trophées, ${sps} star power(s), ${gads} gadget(s), Tier ${tier} méta Mai 2026${hc ? ', Hypercharge disponible' : ''}).
@@ -2955,10 +2927,95 @@ function runSimulation() {
   document.getElementById('simComparison').classList.add('show');
 }
 
+// ══════════════════════════════════════
+//  MULTI-TAG SYSTEM (max 3 tags)
+// ══════════════════════════════════════
+function getTagHistory() {
+  try { return JSON.parse(localStorage.getItem('tag_history')||'[]'); } catch(e){ return []; }
+}
+
+function saveTagToHistory(tag) {
+  let hist = getTagHistory();
+  hist = hist.filter(t => t.toUpperCase() !== tag.toUpperCase()); // remove duplicate
+  hist.unshift(tag); // add to front
+  hist = hist.slice(0, 3); // keep max 3
+  localStorage.setItem('tag_history', JSON.stringify(hist));
+  localStorage.setItem('saved_tag', tag); // keep backward compat
+  renderTagChips();
+}
+
+function renderTagChips() {
+  const hist = getTagHistory();
+  const area = document.getElementById('savedTagArea');
+  const list = document.getElementById('savedTagsList');
+  if (!area || !list) return;
+  if (hist.length === 0) { area.style.display = 'none'; return; }
+  area.style.display = 'block';
+  list.innerHTML = hist.map(tag => `
+    <div class="saved-tag-chip" onclick="loadTag('${tag.replace(/'/g,"\\'")}')">
+      🔖 ${tag}
+    </div>`).join('');
+}
+
+function loadTag(tag) {
+  document.getElementById('tagInput').value = tag;
+  fetchPlayer();
+}
+
+// ══════════════════════════════════════
+//  UNLOCK SELECTOR IN ANALYSER
+// ══════════════════════════════════════
+function renderUnlockSelector(brawler) {
+  const section = document.getElementById('anlUnlockSection');
+  const empty = document.getElementById('anlUnlockEmpty');
+  const btns = document.getElementById('anlUnlockButtons');
+  if(!section || !btns) return;
+
+  const sps = brawler.starPowers?.length || 0;
+  const gads = brawler.gadgets?.length || 0;
+  const hc = hasHypercharge(brawler);
+  const hcAvail = HC_BRAWLERS.has(brawler.name.toUpperCase());
+  const items = [];
+
+  if(brawler.power >= 7) {
+    items.push({ label: `Gadget 1`, icon: '🔧', color:'#ff7043', owned: gads >= 1 });
+    items.push({ label: `Gadget 2`, icon: '🔧', color:'#ff7043', owned: gads >= 2 });
+  }
+  if(brawler.power >= 9) {
+    items.push({ label: `Star Power 1`, icon: '⭐', color:'#f7c948', owned: sps >= 1 });
+    items.push({ label: `Star Power 2`, icon: '⭐', color:'#f7c948', owned: sps >= 2 });
+  }
+  if(brawler.power === 11 && hcAvail) {
+    items.push({ label: `Hypercharge`, icon: '⚡', color:'#a78bfa', owned: hc });
+  }
+
+  if(items.length === 0) {
+    section.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  section.style.display = 'block';
+  empty.style.display = 'none';
+  btns.innerHTML = items.map((item,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:${item.owned?'rgba(74,222,128,0.1)':'var(--surface2)'};border:1px solid ${item.owned?'#4ade80':'var(--border2)'};border-radius:8px">
+      <span style="font-size:16px">${item.icon}</span>
+      <span style="flex:1;font-family:Orbitron,monospace;font-size:11px;color:${item.color}">${item.label}</span>
+      <span style="font-size:12px;font-weight:700;color:${item.owned?'#4ade80':'var(--text-muted)'}">${item.owned ? '✅ OWNED' : '⬜ NOT YET'}</span>
+    </div>`).join('');
+}
+
 // INIT — anglais par défaut
 setLang('en');
+renderTagChips();
+
+// backward compat: migrate old saved_tag to history
 const savedTag=localStorage.getItem('saved_tag');
-if(savedTag){document.getElementById('tagInput').value=savedTag;const a=document.getElementById('savedTagArea'),c=document.getElementById('savedTagText');if(a&&c){c.textContent=savedTag;a.style.display='block';}}
+if(savedTag && getTagHistory().length === 0) saveTagToHistory(savedTag);
+
+// Auto-fill last tag in input
+const lastTag = getTagHistory()[0];
+if(lastTag) document.getElementById('tagInput').value = lastTag;
 
 // Auto-load depuis cache hors-ligne
 (function(){
@@ -3037,10 +3094,18 @@ document.addEventListener('DOMContentLoaded',()=>{['resCoins','resPP','resGems',
           <input type="number" class="anl-res-input" id="anlPP" placeholder="Power Points" min="0">
         </div>
       </div>
-      <button class="anl-sim-btn" onclick="runAnlSimulation()">⚡ SIMULER L'UPGRADE MAXIMUM</button>
+      <button class="anl-sim-btn" onclick="runAnlSimulation()">⚡ SIMULATE MAX UPGRADE</button>
 
       <!-- Simulation Result -->
       <div id="anlSimResult" style="display:none;margin-top:12px"></div>
+
+      <!-- Unlock selector -->
+      <div class="anl-section-title" style="margin-top:20px">🛒 MARK AS PURCHASED</div>
+      <div id="anlUnlockSection" style="display:none">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Track what you've already bought for this brawler :</div>
+        <div id="anlUnlockButtons" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+      <div id="anlUnlockEmpty" style="font-size:11px;color:var(--text-muted);font-style:italic">Reach power 7+ to unlock gadgets and power 9+ for star powers.</div>
     </div>
   </div>
 </div>
