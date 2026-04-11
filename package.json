@@ -6,9 +6,7 @@
     "start": "node server.js"
   },
   "description": "BRAWLSCOPS \u2014 Smart Upgrade Advisor for Brawl Stars by FLAZEOX",
-  "homepage": "https://flazeox.github.io/brawlscops",
+  "homepage": "https://brawlscops.github.io/brawlscops",
   "repository": {
     "type": "git",
-    "url": "https://github.com/flazeox/brawlscops"
-  }
-}
+    "url": "https://github.com/brawlscops/brawlscops
