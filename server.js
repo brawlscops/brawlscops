@@ -1,5 +1,5 @@
-const https = require('https');
 const http = require('http');
+const https = require('https');
 
 const BS_TOKEN = process.env.BS_TOKEN;
 
@@ -7,18 +7,39 @@ http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
 
-  const tag = new URL(req.url, 'http://x').searchParams.get('tag') || '';
-  if (!tag) { res.writeHead(400); res.end(JSON.stringify({error:'Missing tag'})); return; }
+  const url = new URL(req.url, 'http://x');
 
-  const encoded = encodeURIComponent(tag.startsWith('#') ? tag : '#' + tag);
-  https.get({
-    hostname: 'api.brawlstars.com',
-    path: `/v1/players/${encoded}`,
-    headers: { Authorization: `Bearer ${BS_TOKEN}`, Accept: 'application/json' }
-  }, (r) => {
-    let body = '';
-    r.on('data', c => body += c);
-    r.on('end', () => { res.writeHead(r.statusCode); res.end(body); });
-  }).on('error', e => { res.writeHead(500); res.end(JSON.stringify({error: e.message})); });
+  // Route GET /ip → retourne l'IP publique du serveur
+  if (url.pathname === '/ip') {
+    https.get('https://api.ipify.org?format=json', r => {
+      let b = ''; r.on('data', c => b += c);
+      r.on('end', () => res.end(b));
+    }).on('error', e => { res.writeHead(500); res.end(JSON.stringify({ error: e.message })); });
+    return;
+  }
 
-}).listen(process.env.PORT || 3000);
+  // Route GET /player?tag=XXXX → retourne les infos du joueur Brawl Stars
+  if (url.pathname === '/player') {
+    const tag = url.searchParams.get('tag') || '';
+    if (!tag) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing tag' })); return; }
+
+    const encoded = encodeURIComponent(tag.startsWith('#') ? tag : '#' + tag);
+    https.get({
+      hostname: 'api.brawlstars.com',
+      path: `/v1/players/${encoded}`,
+      headers: { Authorization: `Bearer ${BS_TOKEN}`, Accept: 'application/json' }
+    }, (r) => {
+      let body = '';
+      r.on('data', c => body += c);
+      r.on('end', () => { res.writeHead(r.statusCode); res.end(body); });
+    }).on('error', e => { res.writeHead(500); res.end(JSON.stringify({ error: e.message })); });
+    return;
+  }
+
+  // Route inconnue
+  res.writeHead(404);
+  res.end(JSON.stringify({ error: 'Not found' }));
+
+}).listen(process.env.PORT || 3000, () => {
+  console.log(`Server running on port ${process.env.PORT || 3000}`);
+});
