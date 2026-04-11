@@ -9,8 +9,8 @@ http.createServer((req, res) => {
 
   const url = new URL(req.url, 'http://x');
 
-  // Route GET / → retourne l'IP publique du serveur
-  if (url.pathname === '/') {
+  // Route GET / sans tag → retourne l'IP publique du serveur
+  if (url.pathname === '/' && !url.searchParams.get('tag')) {
     https.get('https://api.ipify.org?format=json', r => {
       let b = ''; r.on('data', c => b += c);
       r.on('end', () => res.end(b));
@@ -18,8 +18,8 @@ http.createServer((req, res) => {
     return;
   }
 
-  // Route GET /player?tag=XXXX → retourne les infos du joueur Brawl Stars
-  if (url.pathname === '/player') {
+  // Route GET /player?tag=XXXX ou /?tag=XXXX → retourne les infos du joueur Brawl Stars
+  if (url.pathname === '/player' || url.pathname === '/') {
     const tag = url.searchParams.get('tag') || '';
     if (!tag) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing tag' })); return; }
 
