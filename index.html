@@ -2118,7 +2118,7 @@ const HC_BRAWLERS = new Set(['SHELLY','COLT','BULL','BROCK','EL PRIMO','BARLEY',
 function computePriorityScore(b, allBrawlers) {
   const tier = getBrawlerTier(b.name);
   // Méta base : S=6, A=5, B=3.5, C=2, D=1
-  const tierBase = {S:6, A:5, B:3.5, C:2, D:1}[tier] || 2;
+  const tierBase = {S:5, A:4, B:3, C:2, D:1}[tier] || 2;
 
   // Ce qui manque — pondéré par importance
   const levelGap    = (11 - b.power) / 10;                        // 0..1
@@ -2156,8 +2156,8 @@ function computePriorityScore(b, allBrawlers) {
   const t = b.trophies || 0;
   if(t < 100)      raw += 1.5;
   else if(t < 300) raw += 1.0;
-  else if(t < 500) raw += 0.6;
-  else if(t < 999) raw += 0.3;
+  else if(t < 500) raw += 0.8;
+  else if(t < 999) raw += 0;
 
   // Plafond à 10, arrondi à 1 décimale
   return Math.round(Math.min(10, raw) * 10) / 10;
