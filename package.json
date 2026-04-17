@@ -1,12 +1,8 @@
 {
   "name": "brawlscops",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
-  },
-  "description": "BRAWLSCOPS \u2014 Smart Upgrade Advisor for Brawl Stars by FLAZEOX",
-  "homepage": "https://brawlscops.github.io/brawlscops",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/brawlscops/brawlscops/"
+  }
+}
