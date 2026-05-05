@@ -37,7 +37,6 @@ http.createServer((req, res) => {
     return;
   }
 
-
   // Route GET /version → retourne la version actuelle de l'app
   if (url.pathname === '/version') {
     const fs = require('fs');
@@ -52,6 +51,35 @@ http.createServer((req, res) => {
       res.writeHead(404);
       res.end(JSON.stringify({ error: 'version.json not found' }));
     }
+    return;
+  }
+
+  // Route GET /img?url=https://cdn.brawlify.com/... → proxy images brawlify
+  if (url.pathname === '/img') {
+    const imgUrl = url.searchParams.get('url');
+    if (!imgUrl || !imgUrl.startsWith('https://cdn.brawlify.com/')) {
+      res.writeHead(400);
+      res.setHeader('Content-Type', 'text/plain');
+      res.end('Bad request');
+      return;
+    }
+    https.get(imgUrl, {
+      headers: {
+        'Referer': 'https://brawlify.com',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    }, (r) => {
+      res.writeHead(r.statusCode, {
+        'Content-Type': r.headers['content-type'] || 'image/png',
+        'Cache-Control': 'public, max-age=86400',
+        'Access-Control-Allow-Origin': '*'
+      });
+      r.pipe(res);
+    }).on('error', e => {
+      res.writeHead(500);
+      res.setHeader('Content-Type', 'text/plain');
+      res.end('Proxy error');
+    });
     return;
   }
 
