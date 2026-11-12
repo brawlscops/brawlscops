@@ -1,0 +1,11 @@
+{
+  "updatedAt": "2026-11-11",
+  "source": "SeeMeta — Brawl Stars Ranked, 3-11 nov. 2026 (S+ et S regroupés en S ; F regroupé en D)",
+  "tiers": {
+    "S": ["Mr. P","Hank","Bibi","Juju","Bolt","Trunk","Ash","Chuck","Bo","Angelo","Amber","Edgar","Melodie","Tara","El Primo","Emz"],
+    "A": ["Rosa","Ollie","Willow","Nita","Sprout","Shelly","Nori","Surge","8-Bit","Sam","Lou","Gray","Jacky","Brock","Pearl","Doug","Spike","Larry & Lawrie","Eve","Rico","Najia","Piper"],
+    "B": ["Sandy","Damian","Jessie","Alli","Grom","Bull","Mico","Finx","Barley","R-T","Mortis","Buster","Bonnie","Starr Nova","Gale","Colette","Kaze","Kenji","Chester","Stu","Leon","Frank","Sirius","Darryl","Carl","Mina","Colt"],
+    "C": ["Draco","Glowy","Janet","Belle","Ziggy","Vince","Nani","Moe","Maisie","Tick","Griff","Fang","Mandy","Gus","Lily","Clancy","Cosmo","Buzz","Penny","Lola","Squeak","Poco","Otis","Bea","Wendy","Meeple","Gene"],
+    "D": ["Jae-Yong","Cordelius","Meg","Dynamike","Max","Gigi","Pam","Byron","Crow","Kit","Charlie","Ruffs","Lumi","Berry","Pierce","Shade"]
+  }
+}
